@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>redis test</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx"
+      crossorigin="anonymous"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+      function ajaxRedis(e) {
+        e.preventDefault();
+        const id = e.target.id;
+        inputList = document.forms[id].getElementsByTagName("input");
+        var param = {};
+        for (let element of inputList) {
+          param[element.name] = element.value;
+        }
+        var payload = JSON.stringify(param);
+        var type = id;
+        $.ajax({
+          type: type,
+          url: `/redis/${type}`,
+          data: { payload },
+          dataType: "text",
+          success: function (data, status) {
+            console.log(data);
+          },
+          error: function (xhr, textStatus, error) {
+            console.log(error);
+          },
+        });
+        return false;
+      }
+    </script>
+    <style>
+      .btn {
+        width: 20%;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      class="container position-relative"
+      style="background-color: salmon; height: 500px"
+    >
+      <div class="position-absolute top-50 start-50 translate-middle">
+        <form onsubmit="ajaxRedis(event)" method="get" class="mb-5" id="get">
+          <div class="input-group">
+            <input type="text" name="getText" class="form-control" />
+            <button type="submit" class="btn btn-secondary">get</button>
+          </div>
+        </form>
+
+        <form onsubmit="ajaxRedis(event)" class="mb-5" id="post">
+          <div class="input-group">
+            <span class="input-group-text">KEY</span
+            ><input type="text" name="postTextKey" class="form-control" />
+            <span class="input-group-text">VALUE</span
+            ><input type="text" name="postTextVal" class="form-control" />
+            <button type="submit" class="btn btn-secondary">post</button>
+          </div>
+        </form>
+        <form onsubmit="ajaxRedis(event)" class="mb-5" id="put">
+          <div class="input-group">
+            <input type="text" name="putText" class="form-control" />
+            <button type="submit" class="btn btn-secondary">put</button>
+          </div>
+        </form>
+        <form onsubmit="ajaxRedis(event)" class="mb-5" id="delete">
+          <div class="input-group">
+            <input type="text" name="delText" class="form-control" />
+            <button type="submit" class="btn btn-secondary">delete</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
