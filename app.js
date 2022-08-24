@@ -39,7 +39,7 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
-app.listen(process.env.PORT || 3000, () => {
+app.listen(3000, () => {
   console.log("Node server started");
 });
 // module.exports = app;
