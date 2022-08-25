@@ -29,13 +29,33 @@
           data: { payload },
           dataType: "text",
           success: function (data, status) {
-            console.log(data);
+            $("#getValue").text(data);
           },
           error: function (xhr, textStatus, error) {
             console.log(error);
           },
         });
         return false;
+      }
+      function getKeyList() {
+        $.ajax({
+          type: "GET",
+          url: "/redis/getKeyList",
+          data: "hi",
+          dataType: "text",
+          success: function (data, status) {
+            const keyList = data.replace("[", "").replace("]", "").split(",");
+            var keyArr = [];
+            keyList.forEach((key) => {
+              var pTag = `<option value=${key}>`;
+              keyArr.push(pTag);
+            });
+            $("#keyList").html(keyArr);
+          },
+          error: function (xhr, textStatus, error) {
+            console.log(error);
+          },
+        });
       }
     </script>
     <style>
@@ -44,15 +64,20 @@
       }
     </style>
   </head>
+
   <body>
-    <div
-      class="container position-relative"
-      style="background-color: salmon; height: 500px"
-    >
+    <div class="container position-relative" style="height: 500px">
       <div class="position-absolute top-50 start-50 translate-middle">
         <form onsubmit="ajaxRedis(event)" method="get" class="mb-5" id="get">
           <div class="input-group">
-            <input type="text" name="getText" class="form-control" />
+            <input
+              type="text"
+              name="getText"
+              class="form-control"
+              list="keyList"
+              onkeyup="getKeyList()"
+            />
+            <datalist id="keyList"></datalist>
             <button type="submit" class="btn btn-secondary">get</button>
           </div>
         </form>
@@ -68,7 +93,10 @@
         </form>
         <form onsubmit="ajaxRedis(event)" class="mb-5" id="put">
           <div class="input-group">
-            <input type="text" name="putText" class="form-control" />
+            <span class="input-group-text">KEY</span
+            ><input type="text" name="putTextKey" class="form-control" />
+            <span class="input-group-text">VALUE</span
+            ><input type="text" name="putTextVal" class="form-control" />
             <button type="submit" class="btn btn-secondary">put</button>
           </div>
         </form>
@@ -78,6 +106,8 @@
             <button type="submit" class="btn btn-secondary">delete</button>
           </div>
         </form>
+        <h1>value:</h1>
+        <h3 id="getValue"></h3>
       </div>
     </div>
     <script
